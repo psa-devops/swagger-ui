@@ -1,0 +1,17 @@
+name: Application CI
+on:
+  push:
+    branches:
+      - "simon/support-overwirte-sever"
+
+jobs:
+  app-ci:
+    uses: playstudios/jarvis-shared-workflows/.github/workflows/app-ci.yaml@v1
+    secrets:
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
+    with:
+      apps: '["frontend"]'
+      environment: tnk-ea
