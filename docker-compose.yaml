@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  frontend:
+    image: playstudios.azurecr.io/swagger-ui/frontend:${GIT_SHA_TAG:-latest}
+    build: &frontend-build
+      context: .
+      dockerfile: Dockerfile
+      target: app
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+        - NODE_VERSION=18.16.0
+        - PROJ_PATH=.
+      cache_from:
+        - playstudios.azurecr.io/swagger-ui/frontend:${GIT_SHA_TAG:-latest}
+        - playstudios.azurecr.io/swagger-ui/frontend:${GIT_REF_TAG:-master}
+    ports:
+      - 3000:80
+  
+  test:
+    image: playstudios.azurecr.io/swagger-ui/frontend-test:${GIT_SHA_TAG:-latest}
+    build:
+      <<: *frontend-build
+      target: test
+    volumes:
+      - ./coverage:/coverage
